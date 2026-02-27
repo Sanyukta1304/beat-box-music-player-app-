@@ -1,0 +1,54 @@
+.player-container {
+  background: #1e1e1e;
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  margin: 40px auto;
+  color: white;
+}
+
+.cover {
+  width: 180px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  transition: transform 3s linear;
+}
+
+.rotate {
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.controls button,
+.extra-controls button {
+  margin: 10px;
+  padding: 10px 14px;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #1db954;
+  color: white;
+}
+
+.extra-controls button.active {
+  background: orange;
+}
+
+input[type="range"] {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.volume {
+  margin-top: 10px;
+}
