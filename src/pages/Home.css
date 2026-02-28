@@ -1,0 +1,104 @@
+/* ========================= */
+/* PAGE WRAPPER */
+/* ========================= */
+
+.home {
+  min-height: 100vh;
+  padding: 60px 80px 140px 80px; /* extra bottom space for fixed player */
+  background: linear-gradient(135deg, #0b0f1a, #111827, #0a0f1d);
+  color: white;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ========================= */
+/* HERO SECTION */
+/* ========================= */
+
+.hero {
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+.hero h1 {
+  font-size: 48px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ffffff, #9ca3af);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  font-size: 18px;
+  color: #9ca3af;
+  margin-top: 12px;
+}
+
+/* ========================= */
+/* SECTION STYLING */
+/* ========================= */
+
+.section {
+  margin-bottom: 80px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.section-header h2 {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.section-header span {
+  font-size: 14px;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.section-header span:hover {
+  color: white;
+}
+
+/* ========================= */
+/* GRID (FINAL POLISH) */
+/* ========================= */
+
+.song-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 35px;
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 1024px) {
+  .home {
+    padding: 50px 40px 140px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home {
+    padding: 40px 20px 140px 20px;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  .section-header h2 {
+    font-size: 20px;
+  }
+}

@@ -1,0 +1,217 @@
+/* ================= THEME ================= */
+
+body.dark {
+  --bg: #0f172a;
+  --text: white;
+  --card: #1e293b;
+}
+
+body.light {
+  --bg: #f1f5f9;
+  --text: #0f172a;
+  --card: white;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 70px;
+  padding: 0 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #0f172a, #1e293b);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: 0.3s ease;
+}
+
+.scrolled {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ================= LEFT ================= */
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-box {
+  background: #2563eb;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+}
+
+.brand {
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
+}
+
+/* ================= CENTER ================= */
+
+.nav-center {
+  display: flex;
+  gap: 25px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  color: #cbd5e1;
+  transition: 0.3s ease;
+}
+
+.nav-item:hover {
+  background: rgba(37, 99, 235, 0.2);
+  color: white;
+}
+
+.nav-item.active {
+  background: #2563eb;
+  color: white;
+}
+
+/* ================= RIGHT ================= */
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Search */
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #1e293b;
+  padding: 6px 12px;
+  border-radius: 25px;
+  gap: 8px;
+}
+
+.search-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+}
+
+/* Icons */
+
+.theme-icon,
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: white;
+  transition: 0.3s;
+}
+
+.logout-btn {
+  background: #ef4444;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.logout-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Hamburger */
+
+.hamburger {
+  display: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: white;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 768px) {
+
+  .nav-center {
+    display: none;
+  }
+
+  .logout-btn {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+/* ================= MOBILE DRAWER ================= */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 998;
+}
+
+.mobile-drawer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 250px;
+  height: 100%;
+  background: #0f172a;
+  z-index: 999;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: slideIn 0.3s ease;
+}
+
+.drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.drawer-item.active {
+  color: #2563eb;
+}
+
+.drawer-item.logout {
+  margin-top: auto;
+  color: red;
+}
+
+.drawer-header {
+  text-align: right;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

@@ -1,54 +1,104 @@
-.player-container {
-  background: #1e1e1e;
-  padding: 25px;
-  border-radius: 20px;
-  text-align: center;
-  max-width: 400px;
-  margin: 40px auto;
-  color: white;
-}
+/* ========================= */
+/* PLAYER WRAPPER */
+/* ========================= */
 
-.cover {
-  width: 180px;
-  border-radius: 15px;
-  margin-bottom: 15px;
-  transition: transform 3s linear;
-}
-
-.rotate {
-  animation: spin 8s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.controls button,
-.extra-controls button {
-  margin: 10px;
-  padding: 10px 14px;
-  font-size: 18px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  background: #1db954;
-  color: white;
-}
-
-.extra-controls button.active {
-  background: orange;
-}
-
-input[type="range"] {
+.player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  margin: 10px 0;
+  height: 90px;
+  background: #0f172a;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 50px;
+  box-sizing: border-box;
+  z-index: 1000;
 }
 
-.volume {
-  margin-top: 10px;
+/* ========================= */
+/* LEFT - SONG INFO */
+/* ========================= */
+
+.player-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.player-left img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.player-left h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.player-left p {
+  margin: 0;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* ========================= */
+/* CENTER - CONTROLS */
+/* ========================= */
+
+.player-center {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.player-center button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.player-center button:hover {
+  color: #22c55e;
+  transform: scale(1.1);
+}
+
+/* ========================= */
+/* RIGHT - OPTIONAL */
+/* ========================= */
+
+.player-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .player {
+    padding: 0 20px;
+  }
+
+  .player-left img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .player-center button {
+    font-size: 16px;
+  }
 }

@@ -1,0 +1,38 @@
+export const songs = [
+  {
+    id: 1,
+    title: "Electric Pulse",
+    artist: "Bass Drop",
+    genre: "EDM",
+    duration: "3:43",
+    image: "https://source.unsplash.com/300x300/?music",
+    audio: "/audio/song1.mp3",
+  },
+  {
+    id: 2,
+    title: "Sunset Boulevard",
+    artist: "The Wanderers",
+    genre: "Rock",
+    duration: "3:18",
+    image: "https://source.unsplash.com/300x300/?guitar",
+    audio: "/audio/song2.mp3",
+  },
+  {
+    id: 3,
+    title: "Lo-Fi Study",
+    artist: "Beats Collective",
+    genre: "Lo-Fi",
+    duration: "2:58",
+    image: "https://source.unsplash.com/300x300/?headphones",
+    audio: "/audio/song3.mp3",
+  },
+  {
+    id: 4,
+    title: "Thunder Road",
+    artist: "Rock Legends",
+    genre: "Rock",
+    duration: "4:14",
+    image: "https://source.unsplash.com/300x300/?concert",
+    audio: "/audio/song4.mp3",
+  },
+];
