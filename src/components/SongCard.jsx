@@ -3,31 +3,27 @@ import { MusicContext } from "../context/MusicContext";
 import "./SongCard.css";
 
 const SongCard = ({ song }) => {
-  const { currentSong, isPlaying, playSong } = useContext(MusicContext);
-  const isActive = currentSong?.id === song.id;
+  const { playSong } = useContext(MusicContext);
 
   return (
-    <div
-      className={`song-card ${isActive ? "active" : ""}`}
-      onClick={() => playSong(song)}
-    >
-      <div className="cover">
+    <div className="song-card">
+      <div className="song-image-wrapper">
         <img src={song.image} alt={song.title} />
-
-        <div className="play-overlay">
-          <div className="play-button">
-            {isActive && isPlaying ? "❚❚" : "▶"}
-          </div>
-        </div>
       </div>
 
-      <div className="info">
-        <div className="top">
-          <h3>{song.title}</h3>
-          {song.duration && <span>{song.duration}</span>}
+      <div className="song-info">
+        <h3>{song.title}</h3>
+        <p className="artist">{song.artist}</p>
+        <p className="genre">{song.genre}</p>
+
+        <div className="song-bottom">
+          <span className="duration">{song.duration}</span>
+
+          <div className="card-buttons">
+            <button className="fav-btn">♥</button>
+            <button className="add-btn">+</button>
+          </div>
         </div>
-        <p>{song.artist}</p>
-        {song.genre && <small>{song.genre}</small>}
       </div>
     </div>
   );

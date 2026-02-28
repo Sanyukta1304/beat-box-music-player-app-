@@ -1,8 +1,7 @@
 .trending-section {
-  padding: 40px 60px 80px 60px; /* Desktop 60–80px padding */
-  background: #0f172a;
+  padding: 40px clamp(16px, 4vw, 60px) 120px;
+  box-sizing: border-box;
 }
-
 /* ===== HEADER ===== */
 
 .trending-header {
@@ -22,8 +21,9 @@
 
 .trending-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px; /* EXACT as required */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(16px, 2vw, 28px);
+  width: 100%;
 }
 
 /* Tablet */

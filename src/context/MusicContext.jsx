@@ -1,8 +1,11 @@
-import { createContext, useState, useRef } from "react";
+import { createContext, useState, useRef, useEffect } from "react";
 
 export const MusicContext = createContext();
 
 export const MusicProvider = ({ children }) => {
+  // =============================
+  // AUTH
+  // =============================
   const storedUser =
     typeof window !== "undefined" ? localStorage.getItem("user") : null;
 
@@ -10,12 +13,30 @@ export const MusicProvider = ({ children }) => {
     storedUser ? JSON.parse(storedUser) : null
   );
 
+  const login = (email) => {
+    const userData = { email };
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+  };
+
+  // =============================
+  // AUDIO SYSTEM
+  // =============================
   const audioRef = useRef(new Audio());
 
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [favorites, setFavorites] = useState([]);
+  const [playlist, setPlaylist] = useState([]);
 
-  // ✅ SONG LIST (MATCHES YOUR FILE NAMES)
+  // =============================
+  // SONG LIST (7 SONGS)
+  // =============================
   const songs = [
     {
       id: 1,
@@ -89,9 +110,13 @@ export const MusicProvider = ({ children }) => {
     },
   ];
 
-  // ✅ PLAY SONG
+  // =============================
+  // PLAY SONG
+  // =============================
   const playSong = (song) => {
     if (!song?.audio) return;
+
+    const audio = audioRef.current;
 
     // If same song → toggle
     if (currentSong?.id === song.id) {
@@ -99,50 +124,66 @@ export const MusicProvider = ({ children }) => {
       return;
     }
 
-    try {
-      audioRef.current.pause();
-      audioRef.current.src = song.audio;
-      audioRef.current.load();
-      audioRef.current.play();
+    audio.pause();
+    audio.src = song.audio;
+    audio.load();
 
-      setCurrentSong(song);
-      setIsPlaying(true);
-
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-      };
-    } catch (error) {
-      console.error("Error playing audio:", error);
-    }
+    audio
+      .play()
+      .then(() => {
+        setCurrentSong(song);
+        setIsPlaying(true);
+      })
+      .catch((err) => console.log("Playback error:", err));
   };
 
-  // ✅ TOGGLE PLAY / PAUSE
+  // =============================
+  // TOGGLE PLAY / PAUSE
+  // =============================
   const togglePlay = () => {
     if (!currentSong) return;
 
+    const audio = audioRef.current;
+
     if (isPlaying) {
-      audioRef.current.pause();
+      audio.pause();
+      setIsPlaying(false);
     } else {
-      audioRef.current.play();
+      audio.play();
+      setIsPlaying(true);
     }
-
-    setIsPlaying(!isPlaying);
   };
 
-  // ✅ AUTH FUNCTIONS
-  const login = (email) => {
-    const userData = { email };
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+  // =============================
+  // HANDLE SONG END
+  // =============================
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    const handleEnd = () => {
+      setIsPlaying(false);
+    };
+
+    audio.addEventListener("ended", handleEnd);
+
+    return () => {
+      audio.removeEventListener("ended", handleEnd);
+    };
+  }, []);
+
+  // =============================
+  // FAVORITES & PLAYLIST
+  // =============================
+  const addToFavorites = (song) => {
+    if (!favorites.find((item) => item.id === song.id)) {
+      setFavorites([...favorites, song]);
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
+  const addToPlaylist = (song) => {
+    setPlaylist([...playlist, song]);
   };
 
-  // ✅ FILTERS
-  const filteredSongs = songs;
   const newReleaseSongs = songs.filter((song) => song.isNew);
 
   return (
@@ -152,12 +193,16 @@ export const MusicProvider = ({ children }) => {
         login,
         logout,
         songs,
-        filteredSongs,
         newReleaseSongs,
         currentSong,
         isPlaying,
         playSong,
         togglePlay,
+        favorites,
+        addToFavorites,
+        playlist,
+        addToPlaylist,
+        audioRef,
       }}
     >
       {children}

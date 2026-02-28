@@ -1,42 +1,29 @@
-/* ===== GLOBAL RESET ===== */
-
+/* GLOBAL RESET */
 * {
   box-sizing: border-box;
 }
 
-body {
+html, body {
+  overflow-x: hidden;
   margin: 0;
-  font-family: Arial, sans-serif;
+  padding: 0;
+}
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: #0f172a;
   color: white;
 }
 
-/* ===== NAVBAR ===== */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 140px;
 
-nav {
-  background: #1e293b;
-  padding: 15px 40px;
-  display: flex;
-  gap: 20px;
-}
-
-nav a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-nav a:hover {
-  color: #38bdf8;
-}
-
-/* ===== PLAYER ===== */
-
-.player {
-  position: fixed;
-  bottom: 0;
   width: 100%;
-  background: #1e293b;
-  padding: 15px;
-  text-align: center;
+  max-width: 1300px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
