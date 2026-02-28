@@ -4,44 +4,45 @@ import SongCard from "../components/SongCard";
 import "./Home.css";
 
 const Home = () => {
-  const { filteredSongs, newReleaseSongs } = useContext(MusicContext);
+  const { songs, newReleaseSongs } = useContext(MusicContext);
 
   return (
-    <div className="home">
-
-      {/* HERO */}
+    <div className="home">      
+      {/* Hero Section */}
       <div className="hero">
-        <h1>Welcome to BeatBox</h1>
-        <p>Your vibe. Your music. Anytime.</p>
+        <div className="hero-text">
+          <h1>Welcome to BeatBox</h1>
+          <p>Discover and enjoy your favorite music</p>
+        </div>
       </div>
 
-      {/* TRENDING */}
-      <section className="section">
+      {/* Trending Section */}
+      <div className="section">
         <div className="section-header">
           <h2>Trending Now</h2>
-          <span>View All</span>
+          <span className="view-all">View All</span>
         </div>
 
-        <div className="song-grid">
-          {filteredSongs.map((song) => (
+        <div className="song-row">
+          {songs.map((song) => (
             <SongCard key={song.id} song={song} />
           ))}
         </div>
-      </section>
+      </div>
 
-      {/* NEW RELEASES */}
-      <section className="section">
+      {/* New Releases Section */}
+      <div className="section">
         <div className="section-header">
           <h2>New Releases</h2>
-          <span>View All</span>
+          <span className="view-all">View All</span>
         </div>
 
-        <div className="song-grid">
+        <div className="song-row">
           {newReleaseSongs.map((song) => (
             <SongCard key={song.id} song={song} />
           ))}
         </div>
-      </section>
+      </div>
 
     </div>
   );

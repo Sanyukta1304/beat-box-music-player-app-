@@ -15,7 +15,7 @@ export const MusicProvider = ({ children }) => {
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // ✅ SONG LIST
+  // ✅ SONG LIST (MATCHES YOUR FILE NAMES)
   const songs = [
     {
       id: 1,
@@ -23,9 +23,9 @@ export const MusicProvider = ({ children }) => {
       artist: "Bass Drop",
       genre: "EDM",
       duration: "3:43",
-      image: "/images/song1.jpg",
+      image: "/images/cover1.jpg",
       audio: "/audio/song1.mp3",
-      isNew: true
+      isNew: true,
     },
     {
       id: 2,
@@ -33,9 +33,9 @@ export const MusicProvider = ({ children }) => {
       artist: "Luna Beats",
       genre: "Chill",
       duration: "4:02",
-      image: "/images/song2.jpg",
+      image: "/images/cover2.jpg",
       audio: "/audio/song2.mp3",
-      isNew: false
+      isNew: false,
     },
     {
       id: 3,
@@ -43,9 +43,9 @@ export const MusicProvider = ({ children }) => {
       artist: "DJ Nova",
       genre: "Pop",
       duration: "3:20",
-      image: "/images/song3.jpg",
+      image: "/images/cover3.jpg",
       audio: "/audio/song3.mp3",
-      isNew: true
+      isNew: true,
     },
     {
       id: 4,
@@ -53,9 +53,9 @@ export const MusicProvider = ({ children }) => {
       artist: "Beat Collective",
       genre: "Lo-Fi",
       duration: "2:58",
-      image: "/images/song4.jpg",
+      image: "/images/cover4.jpg",
       audio: "/audio/song4.mp3",
-      isNew: false
+      isNew: false,
     },
     {
       id: 5,
@@ -63,9 +63,9 @@ export const MusicProvider = ({ children }) => {
       artist: "Rock Legends",
       genre: "Rock",
       duration: "4:14",
-      image: "/images/song5.jpg",
+      image: "/images/cover5.jpg",
       audio: "/audio/song5.mp3",
-      isNew: true
+      isNew: true,
     },
     {
       id: 6,
@@ -73,9 +73,9 @@ export const MusicProvider = ({ children }) => {
       artist: "Ava Beats",
       genre: "EDM",
       duration: "3:50",
-      image: "/images/song6.jpg",
+      image: "/images/cover6.jpg",
       audio: "/audio/song6.mp3",
-      isNew: false
+      isNew: false,
     },
     {
       id: 7,
@@ -83,10 +83,10 @@ export const MusicProvider = ({ children }) => {
       artist: "Lofi Crew",
       genre: "Chill",
       duration: "3:33",
-      image: "/images/song7.jpg",
+      image: "/images/cover7.jpg",
       audio: "/audio/song7.mp3",
-      isNew: true
-    }
+      isNew: true,
+    },
   ];
 
   // ✅ PLAY SONG

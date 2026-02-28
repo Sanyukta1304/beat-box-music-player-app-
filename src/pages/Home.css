@@ -1,104 +1,93 @@
 /* ========================= */
-/* PAGE WRAPPER */
-/* ========================= */
-
-.home {
-  min-height: 100vh;
-  padding: 60px 80px 140px 80px; /* extra bottom space for fixed player */
-  background: linear-gradient(135deg, #0b0f1a, #111827, #0a0f1d);
-  color: white;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* ========================= */
 /* HERO SECTION */
 /* ========================= */
 
+/* ========================= */
+/* HERO SECTION (Gradient Banner) */
+/* ========================= */
+
 .hero {
-  text-align: center;
-  margin-bottom: 100px;
+  width: 100%;
+  padding: 50px 60px;
+  margin-bottom: 60px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #3b82f6, #14b8a6);
+}
+
+.hero-text h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: white;
+}
+
+.hero-text p {
+  font-size: 20px;
+  color: #e2e8f0;
+  margin: 0;
+}
+.hero-content {
+  max-width: 500px;
 }
 
 .hero h1 {
-  font-size: 48px;
-  font-weight: 700;
-  background: linear-gradient(90deg, #ffffff, #9ca3af);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 44px;
+  margin: 0 0 15px 0;
 }
 
 .hero p {
   font-size: 18px;
-  color: #9ca3af;
-  margin-top: 12px;
+  color: #d1d5db;
+  margin-bottom: 20px;
 }
 
-/* ========================= */
-/* SECTION STYLING */
-/* ========================= */
+.hero-btn {
+  background: #22c55e;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.hero-btn:hover {
+  background: #16a34a;
+}
+
+
+.home {
+  padding: 40px 60px 120px;
+  min-height: 100vh;
+}
 
 .section {
-  margin-bottom: 80px;
+  margin-bottom: 60px;
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 35px;
+  margin-bottom: 25px;
 }
 
-.section-header h2 {
-  font-size: 26px;
-  font-weight: 600;
-}
-
-.section-header span {
-  font-size: 14px;
-  color: #9ca3af;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.section-header span:hover {
-  color: white;
-}
-
-/* ========================= */
-/* GRID (FINAL POLISH) */
-/* ========================= */
-
-.song-grid {
+.song-row {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 35px;
-}
-
-/* ========================= */
-/* RESPONSIVE */
-/* ========================= */
-
-@media (max-width: 1024px) {
-  .home {
-    padding: 50px 40px 140px 40px;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 30px;
 }
 
 @media (max-width: 768px) {
-  .home {
-    padding: 40px 20px 140px 20px;
+  .hero {
+    padding: 35px 30px;
   }
 
-  .hero h1 {
-    font-size: 34px;
+  .hero-text h1 {
+    font-size: 30px;
   }
 
-  .hero p {
+  .hero-text p {
     font-size: 16px;
-  }
-
-  .section-header h2 {
-    font-size: 20px;
   }
 }

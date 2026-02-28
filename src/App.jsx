@@ -13,58 +13,67 @@ import Favorites from "./pages/Favorites";
 import Album from "./pages/Album";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+import "./App.css"; // make sure this exists
+
 function App() {
   return (
     <MusicProvider>
       <BrowserRouter>
-        <Navbar />
+        <div className="app-layout">
+          {/* Top Navbar */}
+          <Navbar />
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          {/* Main Content */}
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/library"
-            element={
-              <ProtectedRoute>
-                <Library />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/library"
+                element={
+                  <ProtectedRoute>
+                    <Library />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/favorites"
-            element={
-              <ProtectedRoute>
-                <Favorites />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/favorites"
+                element={
+                  <ProtectedRoute>
+                    <Favorites />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route
-            path="/album/:id"
-            element={
-              <ProtectedRoute>
-                <Album />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/album/:id"
+                element={
+                  <ProtectedRoute>
+                    <Album />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+              {/* Redirect unknown routes */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
 
-        {/* Global Player */}
-        <Player />
+          {/* Bottom Global Player */}
+          <Player />
+        </div>
       </BrowserRouter>
     </MusicProvider>
   );
