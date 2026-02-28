@@ -23,7 +23,8 @@ html, body {
   padding-bottom: 140px;
 
   width: 100%;
-  max-width: 1300px;
-  margin: 0 auto;
+  padding-left: clamp(20px, 5vw, 80px);
+  padding-right: clamp(20px, 5vw, 80px);
+
   box-sizing: border-box;
 }

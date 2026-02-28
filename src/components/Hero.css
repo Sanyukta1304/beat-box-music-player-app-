@@ -1,5 +1,5 @@
 .hero {
-  margin: 40px 6%;
+  margin: 40px 0;   /* remove 6% side margin */
   padding: 90px 40px;
   border-radius: 30px;
   background: linear-gradient(135deg, #2563eb, #14b8a6);
@@ -7,6 +7,36 @@
   animation: fadeIn 1s ease;
 }
 
+.hero h1 {
+  font-size: 48px;
+}
+
+.hero p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+
+  .hero {
+    padding: 60px 20px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .hero h1 {
   font-size: 48px;
 }

@@ -159,7 +159,7 @@ const Player = () => {
           <span>{duration}</span>
         </div>
       </div>
-
+      
       {/* RIGHT */}
       <div className="player-right">
         <input

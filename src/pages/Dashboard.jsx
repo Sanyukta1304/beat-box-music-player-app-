@@ -1,16 +1,20 @@
 import { useContext } from "react";
 import { MusicContext } from "../context/MusicContext";
 import SongCard from "../components/SongCard";
+import Hero from "../components/Hero"; // 👈 ADD THIS
 import "./Dashboard.css";
 
 const Dashboard = () => {
   const { songs } = useContext(MusicContext);
 
   const trendingSongs = songs.slice(0, 5);
-  const newReleaseSongs = songs.slice(5, songs.length);
+  const newReleaseSongs = songs.slice(5);
 
   return (
     <div className="dashboard-container">
+
+      {/* ✅ HERO SECTION BACK */}
+      <Hero />
 
       <h2 className="section-title">Trending Now</h2>
       <div className="song-grid">

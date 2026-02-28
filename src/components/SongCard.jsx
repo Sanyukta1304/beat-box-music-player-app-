@@ -3,12 +3,28 @@ import { MusicContext } from "../context/MusicContext";
 import "./SongCard.css";
 
 const SongCard = ({ song }) => {
-  const { playSong } = useContext(MusicContext);
+  const {
+    playSong,
+    currentSong,
+    isPlaying,
+    favorites,
+    addToFavorites,
+  } = useContext(MusicContext);
+
+  const isActive = currentSong?.id === song.id;
+  const isFav = favorites.some((item) => item.id === song.id);
 
   return (
-    <div className="song-card">
+    <div
+      className={`song-card ${isActive ? "active" : ""}`}
+      onClick={() => playSong(song)}
+    >
       <div className="song-image-wrapper">
         <img src={song.image} alt={song.title} />
+
+        <div className="play-overlay">
+          {isActive && isPlaying ? "⏸" : "▶"}
+        </div>
       </div>
 
       <div className="song-info">
@@ -19,8 +35,17 @@ const SongCard = ({ song }) => {
         <div className="song-bottom">
           <span className="duration">{song.duration}</span>
 
-          <div className="card-buttons">
-            <button className="fav-btn">♥</button>
+          <div
+            className="card-buttons"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className={`fav-btn ${isFav ? "active" : ""}`}
+              onClick={() => addToFavorites(song)}
+            >
+              ♥
+            </button>
+
             <button className="add-btn">+</button>
           </div>
         </div>

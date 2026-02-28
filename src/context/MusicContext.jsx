@@ -1,11 +1,8 @@
-import { createContext, useState, useRef, useEffect } from "react";
+import { createContext, useState, useRef } from "react";
 
 export const MusicContext = createContext();
 
 export const MusicProvider = ({ children }) => {
-  // =============================
-  // AUTH
-  // =============================
   const storedUser =
     typeof window !== "undefined" ? localStorage.getItem("user") : null;
 
@@ -13,20 +10,6 @@ export const MusicProvider = ({ children }) => {
     storedUser ? JSON.parse(storedUser) : null
   );
 
-  const login = (email) => {
-    const userData = { email };
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-  };
-
-  // =============================
-  // AUDIO SYSTEM
-  // =============================
   const audioRef = useRef(new Audio());
 
   const [currentSong, setCurrentSong] = useState(null);
@@ -34,9 +17,7 @@ export const MusicProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
   const [playlist, setPlaylist] = useState([]);
 
-  // =============================
-  // SONG LIST (7 SONGS)
-  // =============================
+  // ✅ SONG LIST
   const songs = [
     {
       id: 1,
@@ -110,13 +91,9 @@ export const MusicProvider = ({ children }) => {
     },
   ];
 
-  // =============================
-  // PLAY SONG
-  // =============================
+  // ✅ PLAY SONG
   const playSong = (song) => {
     if (!song?.audio) return;
-
-    const audio = audioRef.current;
 
     // If same song → toggle
     if (currentSong?.id === song.id) {
@@ -124,64 +101,54 @@ export const MusicProvider = ({ children }) => {
       return;
     }
 
-    audio.pause();
-    audio.src = song.audio;
-    audio.load();
+    audioRef.current.pause();
+    audioRef.current.src = song.audio;
+    audioRef.current.load();
+    audioRef.current.play();
 
-    audio
-      .play()
-      .then(() => {
-        setCurrentSong(song);
-        setIsPlaying(true);
-      })
-      .catch((err) => console.log("Playback error:", err));
+    setCurrentSong(song);
+    setIsPlaying(true);
+
+    audioRef.current.onended = () => {
+      setIsPlaying(false);
+    };
   };
 
-  // =============================
-  // TOGGLE PLAY / PAUSE
-  // =============================
+  // ✅ TOGGLE PLAY / PAUSE
   const togglePlay = () => {
     if (!currentSong) return;
 
-    const audio = audioRef.current;
-
     if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
+      audioRef.current.pause();
     } else {
-      audio.play();
-      setIsPlaying(true);
+      audioRef.current.play();
     }
+
+    setIsPlaying(!isPlaying);
   };
 
-  // =============================
-  // HANDLE SONG END
-  // =============================
-  useEffect(() => {
-    const audio = audioRef.current;
-
-    const handleEnd = () => {
-      setIsPlaying(false);
-    };
-
-    audio.addEventListener("ended", handleEnd);
-
-    return () => {
-      audio.removeEventListener("ended", handleEnd);
-    };
-  }, []);
-
-  // =============================
-  // FAVORITES & PLAYLIST
-  // =============================
+  // ✅ ADD TO FAVORITES
   const addToFavorites = (song) => {
     if (!favorites.find((item) => item.id === song.id)) {
       setFavorites([...favorites, song]);
     }
   };
 
+  // ✅ ADD TO PLAYLIST
   const addToPlaylist = (song) => {
     setPlaylist([...playlist, song]);
+  };
+
+  // ✅ AUTH
+  const login = (email) => {
+    const userData = { email };
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
   };
 
   const newReleaseSongs = songs.filter((song) => song.isNew);

@@ -1,5 +1,5 @@
 import SongCard from "./SongCard";
-import "./Trending.css";
+import "./Trending.css"; // reuse same grid styling
 
 function NewReleases({ songs }) {
   return (
@@ -22,7 +22,7 @@ function NewReleases({ songs }) {
       </div>
 
       <div className="trending-grid">
-        {songs?.map((song) => (
+        {songs.map((song) => (
           <SongCard key={song.id} song={song} />
         ))}
       </div>
