@@ -10,7 +10,6 @@ import {
   FaMoon,
   FaSignOutAlt,
   FaBars,
-  FaTimes,
   FaMusic,
 } from "react-icons/fa";
 
@@ -20,12 +19,11 @@ import "./Navbar.css";
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logout, user } = useContext(MusicContext);
+
+  // ✅ USE GLOBAL THEME FROM CONTEXT
+  const { logout, user, theme, setTheme } = useContext(MusicContext);
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [theme, setTheme] = useState(
-    localStorage.getItem("theme") || "dark"
-  );
   const [scrolled, setScrolled] = useState(false);
 
   const navItems = [
@@ -34,14 +32,6 @@ function Navbar() {
     { name: "Favorites", icon: <FaHeart />, path: "/favorites" },
     { name: "Profile", icon: <FaUser />, path: "/dashboard" },
   ];
-
-  /* ================= THEME ================= */
-
-  useEffect(() => {
-    document.body.classList.remove("dark", "light");
-    document.body.classList.add(theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
 
   /* ================= SCROLL ================= */
 
@@ -61,60 +51,59 @@ function Navbar() {
   };
 
   return (
-    <>
-      <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
-        <div className="nav-left" onClick={() => navigate("/")}>
-          <div className="logo-box">
-            <FaMusic />
-          </div>
-          <span className="brand">BeatBox</span>
+    <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
+      <div className="nav-left" onClick={() => navigate("/")}>
+        <div className="logo-box">
+          <FaMusic />
         </div>
+        <span className="brand">BeatBox</span>
+      </div>
 
-        <div className="nav-center">
-          {navItems.map((item) => (
-            <div
-              key={item.name}
-              className={`nav-item ${
-                location.pathname === item.path ? "active" : ""
-              }`}
-              onClick={() => navigate(item.path)}
-            >
-              {item.icon}
-              <span>{item.name}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="nav-right">
-          <div className="search-box">
-            <FaSearch />
-            <input placeholder="Search songs..." />
-          </div>
-
-          {/* THEME TOGGLE */}
+      <div className="nav-center">
+        {navItems.map((item) => (
           <div
-            className="theme-icon"
-            onClick={() =>
-              setTheme(theme === "dark" ? "light" : "dark")
-            }
+            key={item.name}
+            className={`nav-item ${
+              location.pathname === item.path ? "active" : ""
+            }`}
+            onClick={() => navigate(item.path)}
           >
-            {theme === "dark" ? <FaSun /> : <FaMoon />}
+            {item.icon}
+            <span>{item.name}</span>
           </div>
+        ))}
+      </div>
 
-          {user && (
-            <div className="logout-btn" onClick={handleLogout}>
-              <FaSignOutAlt />
-              <span>Logout</span>
-            </div>
-          )}
-
-          <div className="hamburger" onClick={() => setMenuOpen(true)}>
-            <FaBars />
-          </div>
+      <div className="nav-right">
+        <div className="search-box">
+          <FaSearch />
+          <input placeholder="Search songs..." />
         </div>
-      </nav>
-    </>
+
+        {/* ✅ THEME TOGGLE USING GLOBAL STATE */}
+        <div
+          className="theme-icon"
+          onClick={() =>
+            setTheme(theme === "dark" ? "light" : "dark")
+          }
+        >
+          {theme === "dark" ? <FaSun /> : <FaMoon />}
+        </div>
+
+        {user && (
+          <div className="logout-btn" onClick={handleLogout}>
+            <FaSignOutAlt />
+            <span>Logout</span>
+          </div>
+        )}
+
+        <div className="hamburger" onClick={() => setMenuOpen(true)}>
+          <FaBars />
+        </div>
+      </div>
+    </nav>
   );
 }
 
 export default Navbar;
+//

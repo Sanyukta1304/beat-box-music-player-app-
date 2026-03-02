@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { MusicProvider } from "./context/MusicContext";
+import { useState, useEffect } from "react";
 
 import Navbar from "./components/Navbar";
 import Player from "./components/Player";
@@ -15,30 +16,42 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 import "./App.css";
 
-function LayoutWrapper({ children }) {
+/* ================= LAYOUT WRAPPER ================= */
+
+function LayoutWrapper({ children, darkMode, setDarkMode }) {
   const location = useLocation();
 
   // Hide Navbar & Player on auth pages
-  const hideLayout = location.pathname === "/login" || location.pathname === "/register";
+  const hideLayout =
+    location.pathname === "/login" || location.pathname === "/register";
 
   return (
     <div className="app-layout">
-      {!hideLayout && <Navbar />}
+      {!hideLayout && (
+        <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+      )}
 
-      <main className="main-content">
-        {children}
-      </main>
+      <main className="main-content">{children}</main>
 
       {!hideLayout && <Player />}
     </div>
   );
 }
 
+/* ================= MAIN APP ================= */
+
 function App() {
+  const [darkMode, setDarkMode] = useState(true);
+
+  // 🔥 THIS CONNECTS REACT TO CSS
+  useEffect(() => {
+    document.body.className = darkMode ? "dark" : "light";
+  }, [darkMode]);
+
   return (
     <MusicProvider>
       <BrowserRouter>
-        <LayoutWrapper>
+        <LayoutWrapper darkMode={darkMode} setDarkMode={setDarkMode}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -89,3 +102,4 @@ function App() {
 }
 
 export default App;
+//

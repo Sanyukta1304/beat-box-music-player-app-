@@ -1,4 +1,4 @@
-import { createContext, useState, useRef } from "react";
+import { createContext, useState, useRef, useEffect } from "react";
 
 export const MusicContext = createContext();
 
@@ -15,10 +15,22 @@ export const MusicProvider = ({ children }) => {
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // 🔥 NEW STATES
+  // 🔥 PLAYER STATES
   const [isShuffle, setIsShuffle] = useState(false);
-  const [repeatMode, setRepeatMode] = useState("off"); // off | one | all
-  const [activeQueue, setActiveQueue] = useState([]); // 🔥 important
+  const [repeatMode, setRepeatMode] = useState("off");
+  const [activeQueue, setActiveQueue] = useState([]);
+
+  // ✅ THEME STATE (NEW)
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || "dark"
+  );
+
+  // ✅ APPLY THEME TO BODY
+  useEffect(() => {
+    document.body.classList.remove("dark", "light");
+    document.body.classList.add(theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   // ✅ PERSISTENT FAVORITES & PLAYLIST
   const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -101,7 +113,7 @@ export const MusicProvider = ({ children }) => {
     },
   ];
 
-  // ✅ PLAY SONG (NOW SUPPORTS QUEUE)
+  // ✅ PLAY SONG
   const playSong = (song, queue = songs) => {
     if (!song?.audio) return;
 
@@ -130,7 +142,7 @@ export const MusicProvider = ({ children }) => {
     };
   };
 
-  // ✅ TOGGLE PLAY / PAUSE
+  // ✅ TOGGLE PLAY
   const togglePlay = () => {
     if (!currentSong) return;
 
@@ -143,7 +155,7 @@ export const MusicProvider = ({ children }) => {
     setIsPlaying(!isPlaying);
   };
 
-  // 🔥 NEXT SONG (USES ACTIVE QUEUE)
+  // ✅ NEXT SONG
   const playNext = () => {
     if (!currentSong || activeQueue.length === 0) return;
 
@@ -171,7 +183,7 @@ export const MusicProvider = ({ children }) => {
     playSong(activeQueue[nextIndex], activeQueue);
   };
 
-  // 🔥 PREVIOUS SONG (USES ACTIVE QUEUE)
+  // ✅ PREVIOUS SONG
   const playPrevious = () => {
     if (!currentSong || activeQueue.length === 0) return;
 
@@ -188,7 +200,7 @@ export const MusicProvider = ({ children }) => {
     playSong(activeQueue[prevIndex], activeQueue);
   };
 
-  // ✅ TOGGLE FAVORITE
+  // ✅ FAVORITES
   const addToFavorites = (song) => {
     const exists = favorites.find((item) => item.id === song.id);
 
@@ -204,7 +216,7 @@ export const MusicProvider = ({ children }) => {
     localStorage.setItem("favorites", JSON.stringify(updated));
   };
 
-  // ✅ ADD TO PLAYLIST
+  // ✅ PLAYLIST
   const addToPlaylist = (song) => {
     const updated = [...playlist, song];
     setPlaylist(updated);
@@ -252,6 +264,8 @@ export const MusicProvider = ({ children }) => {
         playlist,
         addToPlaylist,
         audioRef,
+        theme,
+        setTheme,
       }}
     >
       {children}

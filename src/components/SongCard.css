@@ -1,12 +1,35 @@
+/* ================= THEME VARIABLES ================= */
+
+body.dark {
+  --song-bg: #1e293b;
+  --song-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  --song-text: #ffffff;
+  --song-muted-1: #9ca3af;
+  --song-muted-2: #6b7280;
+  --song-btn-bg: #334155;
+  --song-btn-hover: #475569;
+}
+
+body.light {
+  --song-bg: #ffffff;
+  --song-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  --song-text: #111827;
+  --song-muted-1: #6b7280;
+  --song-muted-2: #9ca3af;
+  --song-btn-bg: #e5e7eb;
+  --song-btn-hover: #d1d5db;
+}
+
+/* ================= CARD ================= */
+
 .song-card {
-  background: #1e293b;
+  background: var(--song-bg);
+  color: var(--song-text);
   border-radius: 20px;
   padding: 18px;
   display: flex;
   flex-direction: column;
-
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-
+  box-shadow: var(--song-shadow);
   transition: all 0.3s ease;
 }
 
@@ -14,10 +37,11 @@
   transform: translateY(-6px);
 }
 
-/* IMAGE */
+/* ================= IMAGE ================= */
+
 .song-image-wrapper {
   width: 100%;
-  height: 190px;                 /* reduced */
+  height: 190px;
   border-radius: 18px;
   overflow: hidden;
   margin-bottom: 18px;
@@ -29,7 +53,8 @@
   object-fit: cover;
 }
 
-/* TEXT */
+/* ================= TEXT ================= */
+
 .song-info h3 {
   font-size: 17px;
   font-weight: 600;
@@ -37,17 +62,18 @@
 }
 
 .artist {
-  color: #9ca3af;
+  color: var(--song-muted-1);
   font-size: 14px;
 }
 
 .genre {
-  color: #6b7280;
+  color: var(--song-muted-2);
   font-size: 13px;
   margin-bottom: 16px;
 }
 
-/* BOTTOM */
+/* ================= BOTTOM ================= */
+
 .song-bottom {
   margin-top: auto;
   display: flex;
@@ -57,10 +83,11 @@
 
 .duration {
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--song-muted-1);
 }
 
-/* BUTTONS */
+/* ================= BUTTONS ================= */
+
 .card-buttons {
   display: flex;
   gap: 10px;
@@ -71,12 +98,13 @@
   height: 34px;
   border-radius: 12px;
   border: none;
-  background: #334155;
-  color: white;
+  background: var(--song-btn-bg);
+  color: var(--song-text);
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .card-buttons button:hover {
-  background: #475569;
+  background: var(--song-btn-hover);
+  transform: scale(1.05);
 }

@@ -12,9 +12,15 @@ body,
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* ================= DARK MODE (DEFAULT) ================= */
+/* ================= DARK MODE ================= */
 body.dark {
   background: #0f172a;
+  color: white;
+}
+
+/* Dark Cards */
+body.dark .card {
+  background: #1e293b;
   color: white;
 }
 
@@ -22,6 +28,13 @@ body.dark {
 body.light {
   background: #f4f6f9;
   color: #111;
+}
+
+/* Light Cards */
+body.light .card {
+  background: #ffffff;
+  color: #111;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 /* ================= APP LAYOUT ================= */
@@ -41,34 +54,4 @@ body.light {
   padding-top: 20px;
   padding-bottom: 160px;
   box-sizing: border-box;
-}
-
-/* ================= CARDS ================= */
-.card {
-  background: #1e293b;
-  transition: 0.3s ease;
-}
-
-body.light .card {
-  background: white;
-  color: #111;
-}
-
-/* ================= NAVBAR ================= */
-.navbar {
-  transition: background 0.3s ease;
-}
-
-body.light .navbar {
-  background: #ffffff;
-  border-bottom: 1px solid #ddd;
-}
-
-/* ================= PLAYER ================= */
-.player {
-  transition: background 0.3s ease;
-}
-
-body.light .player {
-  background: #eaeaea;
 }
