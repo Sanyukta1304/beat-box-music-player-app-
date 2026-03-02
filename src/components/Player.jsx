@@ -8,16 +8,18 @@ const Player = () => {
     isPlaying,
     togglePlay,
     audioRef,
-    songs,
-    setCurrentSong,
+    playNext,
+    playPrevious,
+    isShuffle,
+    setIsShuffle,
+    repeatMode,
+    setRepeatMode,
   } = useContext(MusicContext);
 
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(0.7);
   const [currentTime, setCurrentTime] = useState("0:00");
   const [duration, setDuration] = useState("0:00");
-  const [repeat, setRepeat] = useState(false);
-  const [shuffle, setShuffle] = useState(false);
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -33,23 +35,12 @@ const Player = () => {
       setDuration(formatTime(audio.duration));
     };
 
-    const handleEnd = () => {
-      if (repeat) {
-        audio.currentTime = 0;
-        audio.play();
-      } else {
-        nextSong();
-      }
-    };
-
     audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("ended", handleEnd);
 
     return () => {
       audio.removeEventListener("timeupdate", updateTime);
-      audio.removeEventListener("ended", handleEnd);
     };
-  }, [audioRef, repeat]);
+  }, [audioRef]);
 
   const formatTime = (time) => {
     if (!time) return "0:00";
@@ -73,38 +64,6 @@ const Player = () => {
     setVolume(value);
   };
 
-  const nextSong = () => {
-    if (!currentSong) return;
-
-    if (shuffle) {
-      const randomIndex = Math.floor(Math.random() * songs.length);
-      setCurrentSong(songs[randomIndex]);
-      return;
-    }
-
-    const currentIndex = songs.findIndex(
-      (song) => song.id === currentSong.id
-    );
-
-    const nextIndex =
-      (currentIndex + 1) % songs.length;
-
-    setCurrentSong(songs[nextIndex]);
-  };
-
-  const prevSong = () => {
-    if (!currentSong) return;
-
-    const currentIndex = songs.findIndex(
-      (song) => song.id === currentSong.id
-    );
-
-    const prevIndex =
-      (currentIndex - 1 + songs.length) % songs.length;
-
-    setCurrentSong(songs[prevIndex]);
-  };
-
   if (!currentSong) return null;
 
   return (
@@ -122,25 +81,37 @@ const Player = () => {
       <div className="player-center">
         <div className="controls">
           <button
-            className={shuffle ? "active" : ""}
-            onClick={() => setShuffle(!shuffle)}
+            className={isShuffle ? "active" : ""}
+            onClick={() => setIsShuffle(!isShuffle)}
           >
             🔀
           </button>
 
-          <button onClick={prevSong}>⏮</button>
+          {/* PREVIOUS */}
+          <button onClick={playPrevious}>⏪</button>
 
+          {/* PLAY / PAUSE */}
           <button className="play-toggle" onClick={togglePlay}>
             {isPlaying ? "❚❚" : "▶"}
           </button>
 
-          <button onClick={nextSong}>⏭</button>
+          {/* NEXT */}
+          <button onClick={playNext}>⏩</button>
 
+          {/* REPEAT */}
           <button
-            className={repeat ? "active" : ""}
-            onClick={() => setRepeat(!repeat)}
+            className={repeatMode !== "off" ? "active" : ""}
+            onClick={() =>
+              setRepeatMode(
+                repeatMode === "off"
+                  ? "all"
+                  : repeatMode === "all"
+                  ? "one"
+                  : "off"
+              )
+            }
           >
-            🔁
+            {repeatMode === "one" ? "🔂" : "🔁"}
           </button>
         </div>
 
@@ -159,7 +130,7 @@ const Player = () => {
           <span>{duration}</span>
         </div>
       </div>
-      
+
       {/* RIGHT */}
       <div className="player-right">
         <input

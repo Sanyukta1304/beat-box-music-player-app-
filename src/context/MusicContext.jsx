@@ -15,6 +15,11 @@ export const MusicProvider = ({ children }) => {
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  // 🔥 NEW STATES
+  const [isShuffle, setIsShuffle] = useState(false);
+  const [repeatMode, setRepeatMode] = useState("off"); // off | one | all
+  const [activeQueue, setActiveQueue] = useState([]); // 🔥 important
+
   // ✅ PERSISTENT FAVORITES & PLAYLIST
   const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
   const storedPlaylist = JSON.parse(localStorage.getItem("playlist")) || [];
@@ -96,9 +101,11 @@ export const MusicProvider = ({ children }) => {
     },
   ];
 
-  // ✅ PLAY SONG
-  const playSong = (song) => {
+  // ✅ PLAY SONG (NOW SUPPORTS QUEUE)
+  const playSong = (song, queue = songs) => {
     if (!song?.audio) return;
+
+    setActiveQueue(queue);
 
     if (currentSong?.id === song.id) {
       togglePlay();
@@ -114,7 +121,12 @@ export const MusicProvider = ({ children }) => {
     setIsPlaying(true);
 
     audioRef.current.onended = () => {
-      setIsPlaying(false);
+      if (repeatMode === "one") {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      } else {
+        playNext();
+      }
     };
   };
 
@@ -131,26 +143,68 @@ export const MusicProvider = ({ children }) => {
     setIsPlaying(!isPlaying);
   };
 
-  // ✅ ADD TO FAVORITES (Persistent)
-  // ✅ TOGGLE FAVORITE (Persistent)
-const addToFavorites = (song) => {
-  const exists = favorites.find((item) => item.id === song.id);
+  // 🔥 NEXT SONG (USES ACTIVE QUEUE)
+  const playNext = () => {
+    if (!currentSong || activeQueue.length === 0) return;
 
-  let updated;
+    const currentIndex = activeQueue.findIndex(
+      (song) => song.id === currentSong.id
+    );
 
-  if (exists) {
-    // Remove from favorites
-    updated = favorites.filter((item) => item.id !== song.id);
-  } else {
-    // Add to favorites
-    updated = [...favorites, song];
-  }
+    let nextIndex;
 
-  setFavorites(updated);
-  localStorage.setItem("favorites", JSON.stringify(updated));
-};
+    if (isShuffle) {
+      nextIndex = Math.floor(Math.random() * activeQueue.length);
+    } else {
+      nextIndex = currentIndex + 1;
 
-  // ✅ ADD TO PLAYLIST (Persistent)
+      if (nextIndex >= activeQueue.length) {
+        if (repeatMode === "all") {
+          nextIndex = 0;
+        } else {
+          setIsPlaying(false);
+          return;
+        }
+      }
+    }
+
+    playSong(activeQueue[nextIndex], activeQueue);
+  };
+
+  // 🔥 PREVIOUS SONG (USES ACTIVE QUEUE)
+  const playPrevious = () => {
+    if (!currentSong || activeQueue.length === 0) return;
+
+    const currentIndex = activeQueue.findIndex(
+      (song) => song.id === currentSong.id
+    );
+
+    let prevIndex = currentIndex - 1;
+
+    if (prevIndex < 0) {
+      prevIndex = activeQueue.length - 1;
+    }
+
+    playSong(activeQueue[prevIndex], activeQueue);
+  };
+
+  // ✅ TOGGLE FAVORITE
+  const addToFavorites = (song) => {
+    const exists = favorites.find((item) => item.id === song.id);
+
+    let updated;
+
+    if (exists) {
+      updated = favorites.filter((item) => item.id !== song.id);
+    } else {
+      updated = [...favorites, song];
+    }
+
+    setFavorites(updated);
+    localStorage.setItem("favorites", JSON.stringify(updated));
+  };
+
+  // ✅ ADD TO PLAYLIST
   const addToPlaylist = (song) => {
     const updated = [...playlist, song];
     setPlaylist(updated);
@@ -164,7 +218,6 @@ const addToFavorites = (song) => {
     localStorage.setItem("user", JSON.stringify(userData));
   };
 
-  // ✅ LOGOUT (clears everything)
   const logout = () => {
     setUser(null);
     setFavorites([]);
@@ -188,6 +241,12 @@ const addToFavorites = (song) => {
         isPlaying,
         playSong,
         togglePlay,
+        playNext,
+        playPrevious,
+        isShuffle,
+        setIsShuffle,
+        repeatMode,
+        setRepeatMode,
         favorites,
         addToFavorites,
         playlist,

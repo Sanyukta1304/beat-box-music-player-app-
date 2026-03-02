@@ -102,7 +102,7 @@ function Library() {
                 className={
                   currentSong?.id === song.id ? "active-row" : ""
                 }
-                onClick={() => playSong(song)}
+                onClick={() => playSong(song, filteredSongs)}
               >
                 <td>{index + 1}</td>
 
