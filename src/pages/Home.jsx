@@ -20,7 +20,6 @@ const Home = () => {
       <div className="section">
         <div className="section-header">
           <h2>Trending Now</h2>
-          <span className="view-all">View All</span>
         </div>
 
         <div className="song-row">
@@ -34,7 +33,6 @@ const Home = () => {
       <div className="section">
         <div className="section-header">
           <h2>New Releases</h2>
-          <span className="view-all">View All</span>
         </div>
 
         <div className="song-row">

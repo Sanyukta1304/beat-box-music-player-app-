@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { MusicProvider } from "./context/MusicContext";
 
 import Navbar from "./components/Navbar";
@@ -13,67 +13,76 @@ import Favorites from "./pages/Favorites";
 import Album from "./pages/Album";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-import "./App.css"; // make sure this exists
+import "./App.css";
+
+function LayoutWrapper({ children }) {
+  const location = useLocation();
+
+  // Hide Navbar & Player on auth pages
+  const hideLayout = location.pathname === "/login" || location.pathname === "/register";
+
+  return (
+    <div className="app-layout">
+      {!hideLayout && <Navbar />}
+
+      <main className="main-content">
+        {children}
+      </main>
+
+      {!hideLayout && <Player />}
+    </div>
+  );
+}
 
 function App() {
   return (
     <MusicProvider>
       <BrowserRouter>
-        <div className="app-layout">
-          {/* Top Navbar */}
-          <Navbar />
+        <LayoutWrapper>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-          {/* Main Content */}
-          <main className="main-content">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/library"
+              element={
+                <ProtectedRoute>
+                  <Library />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/library"
-                element={
-                  <ProtectedRoute>
-                    <Library />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/favorites"
+              element={
+                <ProtectedRoute>
+                  <Favorites />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/favorites"
-                element={
-                  <ProtectedRoute>
-                    <Favorites />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/album/:id"
+              element={
+                <ProtectedRoute>
+                  <Album />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/album/:id"
-                element={
-                  <ProtectedRoute>
-                    <Album />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* Redirect unknown routes */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-
-          {/* Bottom Global Player */}
-          <Player />
-        </div>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </LayoutWrapper>
       </BrowserRouter>
     </MusicProvider>
   );

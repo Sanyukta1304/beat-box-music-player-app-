@@ -1,30 +1,74 @@
-/* GLOBAL RESET */
+/* ================= GLOBAL ================= */
 * {
   box-sizing: border-box;
 }
 
-html, body {
-  overflow-x: hidden;
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
+  height: 100%;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.app-layout {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+/* ================= DARK MODE (DEFAULT) ================= */
+body.dark {
   background: #0f172a;
   color: white;
 }
 
+/* ================= LIGHT MODE ================= */
+body.light {
+  background: #f4f6f9;
+  color: #111;
+}
+
+/* ================= APP LAYOUT ================= */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ================= MAIN CONTENT ================= */
 .main-content {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 140px;
-
   width: 100%;
   padding-left: clamp(20px, 5vw, 80px);
   padding-right: clamp(20px, 5vw, 80px);
-
+  padding-top: 20px;
+  padding-bottom: 160px;
   box-sizing: border-box;
+}
+
+/* ================= CARDS ================= */
+.card {
+  background: #1e293b;
+  transition: 0.3s ease;
+}
+
+body.light .card {
+  background: white;
+  color: #111;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  transition: background 0.3s ease;
+}
+
+body.light .navbar {
+  background: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+/* ================= PLAYER ================= */
+.player {
+  transition: background 0.3s ease;
+}
+
+body.light .player {
+  background: #eaeaea;
 }

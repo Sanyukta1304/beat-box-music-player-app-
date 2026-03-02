@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   FaHome,
   FaListAlt,
@@ -6,78 +7,77 @@ import {
   FaUser,
   FaSearch,
   FaSun,
+  FaMoon,
   FaSignOutAlt,
   FaBars,
   FaTimes,
   FaMusic,
 } from "react-icons/fa";
 
+import { MusicContext } from "../context/MusicContext";
 import "./Navbar.css";
 
 function Navbar() {
-  const [active, setActive] = useState("Home");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { logout, user } = useContext(MusicContext);
+
   const [menuOpen, setMenuOpen] = useState(false);
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || "dark"
+  );
   const [scrolled, setScrolled] = useState(false);
 
   const navItems = [
-    { name: "Home", icon: <FaHome /> },
-    { name: "Library", icon: <FaListAlt /> },
-    { name: "Favorites", icon: <FaHeart /> },
-    { name: "Profile", icon: <FaUser /> },
+    { name: "Home", icon: <FaHome />, path: "/" },
+    { name: "Library", icon: <FaListAlt />, path: "/library" },
+    { name: "Favorites", icon: <FaHeart />, path: "/favorites" },
+    { name: "Profile", icon: <FaUser />, path: "/dashboard" },
   ];
 
   /* ================= THEME ================= */
 
   useEffect(() => {
-    document.body.className = theme;
+    document.body.classList.remove("dark", "light");
+    document.body.classList.add(theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
-  /* ================= SCROLL EFFECT ================= */
+  /* ================= SCROLL ================= */
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* ================= CLOSE DRAWER ON OUTSIDE CLICK ================= */
+  /* ================= LOGOUT ================= */
 
-  useEffect(() => {
-    const handleClick = (e) => {
-      if (menuOpen && !e.target.closest(".mobile-drawer")) {
-        setMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("click", handleClick);
-    return () => document.removeEventListener("click", handleClick);
-  }, [menuOpen]);
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <>
       <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
-
-        {/* LEFT LOGO */}
-        <div className="nav-left">
+        <div className="nav-left" onClick={() => navigate("/")}>
           <div className="logo-box">
             <FaMusic />
           </div>
           <span className="brand">BeatBox</span>
         </div>
 
-        {/* CENTER NAV */}
         <div className="nav-center">
           {navItems.map((item) => (
             <div
               key={item.name}
               className={`nav-item ${
-                active === item.name ? "active" : ""
+                location.pathname === item.path ? "active" : ""
               }`}
-              onClick={() => setActive(item.name)}
+              onClick={() => navigate(item.path)}
             >
               {item.icon}
               <span>{item.name}</span>
@@ -85,78 +85,34 @@ function Navbar() {
           ))}
         </div>
 
-        {/* RIGHT SIDE */}
         <div className="nav-right">
-
-          {/* SEARCH */}
           <div className="search-box">
             <FaSearch />
-            <input
-              type="text"
-              placeholder="Search songs, artists..."
-            />
+            <input placeholder="Search songs..." />
           </div>
 
-          {/* THEME */}
+          {/* THEME TOGGLE */}
           <div
             className="theme-icon"
             onClick={() =>
               setTheme(theme === "dark" ? "light" : "dark")
             }
           >
-            <FaSun />
+            {theme === "dark" ? <FaSun /> : <FaMoon />}
           </div>
 
-          {/* LOGOUT */}
-          <div className="logout-btn">
-            <FaSignOutAlt />
-            <span>Logout</span>
-          </div>
+          {user && (
+            <div className="logout-btn" onClick={handleLogout}>
+              <FaSignOutAlt />
+              <span>Logout</span>
+            </div>
+          )}
 
-          {/* HAMBURGER */}
-          <div
-            className="hamburger"
-            onClick={() => setMenuOpen(true)}
-          >
+          <div className="hamburger" onClick={() => setMenuOpen(true)}>
             <FaBars />
           </div>
         </div>
       </nav>
-
-      {/* ================= MOBILE DRAWER ================= */}
-
-      {menuOpen && (
-        <>
-          <div className="overlay" />
-
-          <div className="mobile-drawer">
-            <div className="drawer-header">
-              <FaTimes onClick={() => setMenuOpen(false)} />
-            </div>
-
-            {navItems.map((item) => (
-              <div
-                key={item.name}
-                className={`drawer-item ${
-                  active === item.name ? "active" : ""
-                }`}
-                onClick={() => {
-                  setActive(item.name);
-                  setMenuOpen(false);
-                }}
-              >
-                {item.icon}
-                <span>{item.name}</span>
-              </div>
-            ))}
-
-            <div className="drawer-item logout">
-              <FaSignOutAlt />
-              <span>Logout</span>
-            </div>
-          </div>
-        </>
-      )}
     </>
   );
 }

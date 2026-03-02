@@ -14,8 +14,13 @@ export const MusicProvider = ({ children }) => {
 
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [favorites, setFavorites] = useState([]);
-  const [playlist, setPlaylist] = useState([]);
+
+  // ✅ PERSISTENT FAVORITES & PLAYLIST
+  const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+  const storedPlaylist = JSON.parse(localStorage.getItem("playlist")) || [];
+
+  const [favorites, setFavorites] = useState(storedFavorites);
+  const [playlist, setPlaylist] = useState(storedPlaylist);
 
   // ✅ SONG LIST
   const songs = [
@@ -95,7 +100,6 @@ export const MusicProvider = ({ children }) => {
   const playSong = (song) => {
     if (!song?.audio) return;
 
-    // If same song → toggle
     if (currentSong?.id === song.id) {
       togglePlay();
       return;
@@ -127,16 +131,20 @@ export const MusicProvider = ({ children }) => {
     setIsPlaying(!isPlaying);
   };
 
-  // ✅ ADD TO FAVORITES
+  // ✅ ADD TO FAVORITES (Persistent)
   const addToFavorites = (song) => {
     if (!favorites.find((item) => item.id === song.id)) {
-      setFavorites([...favorites, song]);
+      const updated = [...favorites, song];
+      setFavorites(updated);
+      localStorage.setItem("favorites", JSON.stringify(updated));
     }
   };
 
-  // ✅ ADD TO PLAYLIST
+  // ✅ ADD TO PLAYLIST (Persistent)
   const addToPlaylist = (song) => {
-    setPlaylist([...playlist, song]);
+    const updated = [...playlist, song];
+    setPlaylist(updated);
+    localStorage.setItem("playlist", JSON.stringify(updated));
   };
 
   // ✅ AUTH
@@ -146,9 +154,14 @@ export const MusicProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
   };
 
+  // ✅ LOGOUT (clears everything)
   const logout = () => {
     setUser(null);
+    setFavorites([]);
+    setPlaylist([]);
     localStorage.removeItem("user");
+    localStorage.removeItem("favorites");
+    localStorage.removeItem("playlist");
   };
 
   const newReleaseSongs = songs.filter((song) => song.isNew);
