@@ -20,8 +20,9 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // ✅ USE GLOBAL THEME FROM CONTEXT
-  const { logout, user, theme, setTheme } = useContext(MusicContext);
+  // ✅ GET SEARCH FROM CONTEXT
+  const { logout, user, theme, setTheme, searchQuery, setSearchQuery } =
+    useContext(MusicContext);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -52,6 +53,7 @@ function Navbar() {
 
   return (
     <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
+      {/* LEFT */}
       <div className="nav-left" onClick={() => navigate("/")}>
         <div className="logo-box">
           <FaMusic />
@@ -59,6 +61,7 @@ function Navbar() {
         <span className="brand">BeatBox</span>
       </div>
 
+      {/* CENTER */}
       <div className="nav-center">
         {navItems.map((item) => (
           <div
@@ -74,13 +77,20 @@ function Navbar() {
         ))}
       </div>
 
+      {/* RIGHT */}
       <div className="nav-right">
+        {/* 🔍 SEARCH BOX (CONNECTED) */}
         <div className="search-box">
           <FaSearch />
-          <input placeholder="Search songs..." />
+          <input
+            type="text"
+            placeholder="Search songs..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
 
-        {/* ✅ THEME TOGGLE USING GLOBAL STATE */}
+        {/* 🌙 THEME TOGGLE */}
         <div
           className="theme-icon"
           onClick={() =>
@@ -90,6 +100,7 @@ function Navbar() {
           {theme === "dark" ? <FaSun /> : <FaMoon />}
         </div>
 
+        {/* 🚪 LOGOUT */}
         {user && (
           <div className="logout-btn" onClick={handleLogout}>
             <FaSignOutAlt />
@@ -106,4 +117,3 @@ function Navbar() {
 }
 
 export default Navbar;
-//

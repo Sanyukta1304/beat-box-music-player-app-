@@ -20,12 +20,15 @@ export const MusicProvider = ({ children }) => {
   const [repeatMode, setRepeatMode] = useState("off");
   const [activeQueue, setActiveQueue] = useState([]);
 
-  // ✅ THEME STATE (NEW)
+  // 🔎 ✅ SEARCH STATE (NEW)
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // ✅ THEME STATE
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") || "dark"
   );
 
-  // ✅ APPLY THEME TO BODY
+  // ✅ APPLY THEME
   useEffect(() => {
     document.body.classList.remove("dark", "light");
     document.body.classList.add(theme);
@@ -142,7 +145,6 @@ export const MusicProvider = ({ children }) => {
     };
   };
 
-  // ✅ TOGGLE PLAY
   const togglePlay = () => {
     if (!currentSong) return;
 
@@ -155,7 +157,6 @@ export const MusicProvider = ({ children }) => {
     setIsPlaying(!isPlaying);
   };
 
-  // ✅ NEXT SONG
   const playNext = () => {
     if (!currentSong || activeQueue.length === 0) return;
 
@@ -183,7 +184,6 @@ export const MusicProvider = ({ children }) => {
     playSong(activeQueue[nextIndex], activeQueue);
   };
 
-  // ✅ PREVIOUS SONG
   const playPrevious = () => {
     if (!currentSong || activeQueue.length === 0) return;
 
@@ -200,7 +200,6 @@ export const MusicProvider = ({ children }) => {
     playSong(activeQueue[prevIndex], activeQueue);
   };
 
-  // ✅ FAVORITES
   const addToFavorites = (song) => {
     const exists = favorites.find((item) => item.id === song.id);
 
@@ -216,14 +215,12 @@ export const MusicProvider = ({ children }) => {
     localStorage.setItem("favorites", JSON.stringify(updated));
   };
 
-  // ✅ PLAYLIST
   const addToPlaylist = (song) => {
     const updated = [...playlist, song];
     setPlaylist(updated);
     localStorage.setItem("playlist", JSON.stringify(updated));
   };
 
-  // ✅ AUTH
   const login = (email) => {
     const userData = { email };
     setUser(userData);
@@ -266,6 +263,10 @@ export const MusicProvider = ({ children }) => {
         audioRef,
         theme,
         setTheme,
+
+        // 🔎 EXPORT SEARCH
+        searchQuery,
+        setSearchQuery,
       }}
     >
       {children}

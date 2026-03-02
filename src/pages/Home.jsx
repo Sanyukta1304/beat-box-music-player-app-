@@ -1,13 +1,35 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { MusicContext } from "../context/MusicContext";
 import SongCard from "../components/SongCard";
 import "./Home.css";
 
 const Home = () => {
-  const { songs, newReleaseSongs } = useContext(MusicContext);
+  const { songs, newReleaseSongs, searchQuery } =
+    useContext(MusicContext);
+
+  // 🔍 FILTER TRENDING
+  const filteredSongs = useMemo(() => {
+    if (!searchQuery.trim()) return songs;
+
+    return songs.filter((song) =>
+      song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      song.artist.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [songs, searchQuery]);
+
+  // 🔍 FILTER NEW RELEASES
+  const filteredNewReleases = useMemo(() => {
+    if (!searchQuery.trim()) return newReleaseSongs;
+
+    return newReleaseSongs.filter((song) =>
+      song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      song.artist.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [newReleaseSongs, searchQuery]);
 
   return (
-    <div className="home">      
+    <div className="home">
+      
       {/* Hero Section */}
       <div className="hero">
         <div className="hero-text">
@@ -23,9 +45,13 @@ const Home = () => {
         </div>
 
         <div className="song-row">
-          {songs.map((song) => (
-            <SongCard key={song.id} song={song} />
-          ))}
+          {filteredSongs.length > 0 ? (
+            filteredSongs.map((song) => (
+              <SongCard key={song.id} song={song} />
+            ))
+          ) : (
+            <p className="no-results">No songs found</p>
+          )}
         </div>
       </div>
 
@@ -36,12 +62,15 @@ const Home = () => {
         </div>
 
         <div className="song-row">
-          {newReleaseSongs.map((song) => (
-            <SongCard key={song.id} song={song} />
-          ))}
+          {filteredNewReleases.length > 0 ? (
+            filteredNewReleases.map((song) => (
+              <SongCard key={song.id} song={song} />
+            ))
+          ) : (
+            <p className="no-results">No songs found</p>
+          )}
         </div>
       </div>
-
     </div>
   );
 };

@@ -10,6 +10,7 @@ function Library() {
     addToPlaylist,
     favorites,
     currentSong,
+    searchQuery, // ✅ SEARCH ADDED
   } = useContext(MusicContext);
 
   const [selectedGenre, setSelectedGenre] = useState("All");
@@ -18,20 +19,28 @@ function Library() {
   const isFavorite = (id) =>
     favorites.some((song) => song.id === id);
 
-  // 🎯 FILTER + SORT LOGIC
+  // 🎯 SEARCH + FILTER + SORT
   const filteredSongs = useMemo(() => {
     let updatedSongs = [...songs];
 
-    // Filter by genre
+    // 🔍 SEARCH FILTER
+    if (searchQuery.trim() !== "") {
+      updatedSongs = updatedSongs.filter((song) =>
+        song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        song.artist.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // 🎵 GENRE FILTER
     if (selectedGenre !== "All") {
       updatedSongs = updatedSongs.filter(
         (song) => song.genre === selectedGenre
       );
     }
 
-    // Sort logic
+    // 🔄 SORTING
     if (sortOption === "Newest") {
-      updatedSongs.reverse(); // latest added at bottom → reverse for newest first
+      updatedSongs = [...updatedSongs].reverse();
     }
 
     if (sortOption === "Duration") {
@@ -45,7 +54,7 @@ function Library() {
     }
 
     return updatedSongs;
-  }, [songs, selectedGenre, sortOption]);
+  }, [songs, selectedGenre, sortOption, searchQuery]);
 
   return (
     <div className="library">
@@ -157,7 +166,13 @@ function Library() {
 
             {filteredSongs.length === 0 && (
               <tr>
-                <td colSpan="5" style={{ textAlign: "center", padding: "40px" }}>
+                <td
+                  colSpan="5"
+                  style={{
+                    textAlign: "center",
+                    padding: "40px",
+                  }}
+                >
                   No songs found
                 </td>
               </tr>

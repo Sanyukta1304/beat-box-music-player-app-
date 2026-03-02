@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MusicContext } from "../context/MusicContext";
-import "./Login.css"; // ✅ we move styles to css file
+import "./Login.css";
 
 function Login() {
   const { login } = useContext(MusicContext);
@@ -10,7 +10,10 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
+  // ✅ Now handles BOTH button click + Enter key
+  const handleSubmit = (e) => {
+    e.preventDefault(); // stop page reload
+
     const users = JSON.parse(localStorage.getItem("users")) || [];
 
     const foundUser = users.find(
@@ -41,29 +44,37 @@ function Login() {
         <h2>Welcome Back</h2>
         <p>Sign in to continue to BeatBox</p>
 
-        <input
-          type="email"
-          placeholder="Email Address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        {/* ✅ FORM START */}
+        <form onSubmit={handleSubmit}>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <button onClick={handleLogin}>
-          Sign In
-        </button>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          {/* IMPORTANT */}
+          <button type="submit">
+            Sign In
+          </button>
+
+        </form>
 
         <div className="signup-text">
           Don’t have an account?
-            <span onClick={() => navigate("/register")}>
-              Sign Up
-            </span>
+          <span onClick={() => navigate("/register")}>
+            Sign Up
+          </span>
         </div>
 
       </div>
