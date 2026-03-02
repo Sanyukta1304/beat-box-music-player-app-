@@ -132,13 +132,23 @@ export const MusicProvider = ({ children }) => {
   };
 
   // ✅ ADD TO FAVORITES (Persistent)
-  const addToFavorites = (song) => {
-    if (!favorites.find((item) => item.id === song.id)) {
-      const updated = [...favorites, song];
-      setFavorites(updated);
-      localStorage.setItem("favorites", JSON.stringify(updated));
-    }
-  };
+  // ✅ TOGGLE FAVORITE (Persistent)
+const addToFavorites = (song) => {
+  const exists = favorites.find((item) => item.id === song.id);
+
+  let updated;
+
+  if (exists) {
+    // Remove from favorites
+    updated = favorites.filter((item) => item.id !== song.id);
+  } else {
+    // Add to favorites
+    updated = [...favorites, song];
+  }
+
+  setFavorites(updated);
+  localStorage.setItem("favorites", JSON.stringify(updated));
+};
 
   // ✅ ADD TO PLAYLIST (Persistent)
   const addToPlaylist = (song) => {
