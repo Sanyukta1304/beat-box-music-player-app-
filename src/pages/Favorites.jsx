@@ -11,7 +11,7 @@ function Favorites() {
   } = useContext(MusicContext);
 
   return (
-    <div style={{ padding: "30px 60px 120px" }}>
+    <div className="favorites-page">
       {/* HEADER */}
       <div className="fav-header">
         <div className="fav-icon">❤️</div>
@@ -34,15 +34,9 @@ function Favorites() {
         </div>
 
         {filteredFavorites.length === 0 ? (
-          <p
-            style={{
-              padding: "30px",
-              textAlign: "center",
-              opacity: 0.6,
-            }}
-          >
+          <div className="fav-empty">
             No results found
-          </p>
+          </div>
         ) : (
           filteredFavorites.map((song, index) => (
             <div
@@ -53,22 +47,19 @@ function Favorites() {
               }
             >
               {/* INDEX */}
-              <span>{index + 1}</span>
+              <span className="fav-index">
+                {index + 1}
+              </span>
 
-              {/* TITLE + IMAGE */}
+              {/* TITLE */}
               <div className="fav-song-info">
-                <img src={song.image} alt={song.title} />
+                <img
+                  src={song.image}
+                  alt={song.title}
+                />
                 <div>
-                  <h4 style={{ margin: 0 }}>{song.title}</h4>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: "14px",
-                      opacity: 0.7,
-                    }}
-                  >
-                    {song.artist}
-                  </p>
+                  <h4>{song.title}</h4>
+                  <p>{song.artist}</p>
                 </div>
               </div>
 
@@ -90,14 +81,18 @@ function Favorites() {
               >
                 <button
                   className="fav-btn"
-                  onClick={() => addToFavorites(song)}
+                  onClick={() =>
+                    addToFavorites(song)
+                  }
                 >
                   ❤️
                 </button>
 
                 <button
                   className="fav-btn"
-                  onClick={() => addToPlaylist(song)}
+                  onClick={() =>
+                    addToPlaylist(song)
+                  }
                 >
                   ➕
                 </button>

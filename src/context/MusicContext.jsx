@@ -15,7 +15,6 @@ export const MusicProvider = ({ children }) => {
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // 🔥 PLAYER STATES
   const [isShuffle, setIsShuffle] = useState(false);
   const [repeatMode, setRepeatMode] = useState("off");
   const [activeQueue, setActiveQueue] = useState([]);
@@ -23,7 +22,7 @@ export const MusicProvider = ({ children }) => {
   // 🔎 SEARCH
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 🎨 THEME
+  // 🎨 THEME (FIXED PROPERLY)
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") || "dark"
   );
@@ -33,6 +32,16 @@ export const MusicProvider = ({ children }) => {
     document.body.classList.add(theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
+
+  // 🔔 TOAST SYSTEM
+  const [toast, setToast] = useState("");
+
+  const showToast = (message) => {
+    setToast(message);
+    setTimeout(() => {
+      setToast("");
+    }, 2000);
+  };
 
   // 💾 LOCAL STORAGE
   const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -72,7 +81,7 @@ export const MusicProvider = ({ children }) => {
       genre: "Pop",
       album: "City Lights",
       duration: "3:20",
-      image: "/audio/song3.mp3",
+      image: "/images/cover3.jpg",
       audio: "/audio/song3.mp3",
       isNew: true,
     },
@@ -132,7 +141,6 @@ export const MusicProvider = ({ children }) => {
     );
   };
 
-  // 🧠 MEMOIZED FILTERED DATA
   const filteredSongs = useMemo(
     () => filterSongs(songs),
     [searchQuery]
@@ -222,28 +230,42 @@ export const MusicProvider = ({ children }) => {
     );
 
     let prevIndex = currentIndex - 1;
-
     if (prevIndex < 0) prevIndex = activeQueue.length - 1;
 
     playSong(activeQueue[prevIndex], activeQueue);
   };
 
+  // ❤️ FAVORITES WITH TOAST
   const addToFavorites = (song) => {
     const exists = favorites.find((item) => item.id === song.id);
 
     let updated;
 
-    if (exists) updated = favorites.filter((item) => item.id !== song.id);
-    else updated = [...favorites, song];
+    if (exists) {
+      updated = favorites.filter((item) => item.id !== song.id);
+      showToast("Removed from Favorites ❌");
+    } else {
+      updated = [...favorites, song];
+      showToast("Added to Favorites ❤️");
+    }
 
     setFavorites(updated);
     localStorage.setItem("favorites", JSON.stringify(updated));
   };
 
+  // ➕ PLAYLIST WITH DUPLICATE CHECK + TOAST
   const addToPlaylist = (song) => {
+    const exists = playlist.find((item) => item.id === song.id);
+
+    if (exists) {
+      showToast("Already in Playlist ⚠️");
+      return;
+    }
+
     const updated = [...playlist, song];
     setPlaylist(updated);
     localStorage.setItem("playlist", JSON.stringify(updated));
+    showToast("Added to Playlist 🎵");
   };
 
   const login = (email) => {
@@ -291,6 +313,8 @@ export const MusicProvider = ({ children }) => {
         setTheme,
         searchQuery,
         setSearchQuery,
+        toast,
+        filterSongs,
       }}
     >
       {children}

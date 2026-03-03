@@ -1,78 +1,100 @@
+/* ================= PAGE ================= */
+
+.favorites-page {
+  padding: 30px 60px 120px;
+}
+
 /* ================= HEADER ================= */
 
 .fav-header {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 40px;
+  gap: 25px;
+  padding: 45px;
   border-radius: 20px;
   margin-bottom: 40px;
   background: linear-gradient(90deg, #ef4444, #ec4899);
+  color: white;
 }
 
 .fav-icon {
-  font-size: 50px;
+  font-size: 55px;
   background: rgba(255, 255, 255, 0.2);
-  padding: 25px;
-  border-radius: 15px;
+  padding: 28px;
+  border-radius: 18px;
+  backdrop-filter: blur(5px);
 }
 
 .fav-title h1 {
   margin: 0;
-  font-size: 40px;
-  color: white;
+  font-size: 42px;
+  font-weight: 700;
 }
 
 .fav-title p {
-  margin-top: 5px;
-  color: #f3f4f6;
+  margin-top: 8px;
+  font-size: 14px;
+  opacity: 0.9;
 }
 
-/* ================= TABLE ================= */
+/* ================= TABLE CONTAINER ================= */
 
 .fav-table {
-  border-radius: 15px;
+  border-radius: 18px;
   overflow: hidden;
+  transition: 0.3s ease;
 }
 
+/* Dark */
 body.dark .fav-table {
   background: #1e293b;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
+/* Light */
 body.light .fav-table {
   background: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
+
+/* ================= ROW STRUCTURE ================= */
 
 .fav-row,
 .fav-header-row {
   display: grid;
   grid-template-columns: 60px 2fr 1fr 1fr 120px 120px;
   align-items: center;
-  padding: 15px 25px;
+  padding: 16px 28px;
 }
 
 .fav-header-row {
-  font-weight: bold;
+  font-weight: 600;
   opacity: 0.7;
+}
+
+/* Header border */
+body.dark .fav-header-row {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 body.light .fav-header-row {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
+
+/* ================= ROW ================= */
 
 .fav-row {
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
 }
 
+/* Hover Effects */
 body.dark .fav-row:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 body.light .fav-row:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 /* ================= TITLE COLUMN ================= */
@@ -80,20 +102,35 @@ body.light .fav-row:hover {
 .fav-song-info {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
 }
 
 .fav-song-info img {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  object-fit: cover;
 }
 
+.fav-song-info h4 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.fav-song-info p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+/* ================= GENRE BADGE ================= */
+
 .fav-genre {
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: 20px;
   font-size: 12px;
   width: fit-content;
+  font-weight: 500;
 }
 
 body.dark .fav-genre {
@@ -104,16 +141,32 @@ body.light .fav-genre {
   background: rgba(0, 0, 0, 0.08);
 }
 
-/* ================= BUTTONS ================= */
+/* ================= ACTION BUTTONS ================= */
 
 .fav-actions {
   display: flex;
-  gap: 15px;
+  gap: 18px;
 }
 
 .fav-btn {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 17px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.8;
+}
+
+.fav-btn:hover {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+/* ================= EMPTY STATE ================= */
+
+.fav-empty {
+  padding: 60px;
+  text-align: center;
+  opacity: 0.6;
+  font-size: 15px;
 }

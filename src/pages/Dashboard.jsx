@@ -3,8 +3,19 @@ import { MusicContext } from "../context/MusicContext";
 import "./Dashboard.css";
 
 function Dashboard() {
-  const { user, playlist, favorites, songs } =
-    useContext(MusicContext);
+  const {
+    user,
+    playlist,
+    favorites,
+    songs,
+    filterSongs,   // ✅ get filter function
+    searchQuery,   // ✅ optional (if needed later)
+  } = useContext(MusicContext);
+
+  // ✅ Filter playlist based on search
+  const filteredPlaylist = filterSongs
+    ? filterSongs(playlist)
+    : playlist;
 
   const firstLetter =
     user?.email?.charAt(0).toUpperCase() || "U";
@@ -28,7 +39,11 @@ function Dashboard() {
         <div className="stat-card">
           <div>
             <h3>My Playlists</h3>
-            <h2>{playlist.length}</h2>
+            <h2>
+              {searchQuery
+                ? filteredPlaylist.length
+                : playlist.length}
+            </h2>
           </div>
           <div className="stat-icon blue">🎵</div>
         </div>
@@ -54,16 +69,23 @@ function Dashboard() {
       <div className="dashboard-playlists">
         <h2>My Playlists</h2>
 
-        {playlist.length === 0 ? (
+        {filteredPlaylist.length === 0 ? (
           <div className="empty-playlist">
             <div className="empty-icon">🎵</div>
-            <p>No playlists yet</p>
+            <p>
+              {searchQuery
+                ? "No matching songs found"
+                : "No playlists yet"}
+            </p>
           </div>
         ) : (
           <div className="playlist-list">
-            {playlist.map((song) => (
+            {filteredPlaylist.map((song) => (
               <div key={song.id} className="playlist-item">
-                <img src={song.image} alt={song.title} />
+                <img
+                  src={song.image}
+                  alt={song.title}
+                />
                 <div>
                   <h4>{song.title}</h4>
                   <p>{song.artist}</p>
