@@ -9,6 +9,7 @@ const SongCard = ({ song }) => {
     isPlaying,
     favorites,
     addToFavorites,
+    addToPlaylist,
   } = useContext(MusicContext);
 
   const isActive = currentSong?.id === song.id;
@@ -40,13 +41,18 @@ const SongCard = ({ song }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              className={`fav-btn ${isFav ? "active" : ""}`}
+              className={isFav ? "heart active" : "heart"}
               onClick={() => addToFavorites(song)}
             >
-              ♥
+              ❤️
             </button>
 
-            <button className="add-btn">+</button>
+            <button
+              className="add"
+              onClick={() => addToPlaylist(song)}
+            >
+              ➕
+            </button>
           </div>
         </div>
       </div>
