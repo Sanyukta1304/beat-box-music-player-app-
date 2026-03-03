@@ -1,4 +1,4 @@
-import { createContext, useState, useRef, useEffect } from "react";
+import { createContext, useState, useRef, useEffect, useMemo } from "react";
 
 export const MusicContext = createContext();
 
@@ -20,35 +20,35 @@ export const MusicProvider = ({ children }) => {
   const [repeatMode, setRepeatMode] = useState("off");
   const [activeQueue, setActiveQueue] = useState([]);
 
-  // 🔎 ✅ SEARCH STATE (NEW)
+  // 🔎 SEARCH
   const [searchQuery, setSearchQuery] = useState("");
 
-  // ✅ THEME STATE
+  // 🎨 THEME
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") || "dark"
   );
 
-  // ✅ APPLY THEME
   useEffect(() => {
     document.body.classList.remove("dark", "light");
     document.body.classList.add(theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // ✅ PERSISTENT FAVORITES & PLAYLIST
+  // 💾 LOCAL STORAGE
   const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
   const storedPlaylist = JSON.parse(localStorage.getItem("playlist")) || [];
 
   const [favorites, setFavorites] = useState(storedFavorites);
   const [playlist, setPlaylist] = useState(storedPlaylist);
 
-  // ✅ SONG LIST
+  // 🎵 SONG LIST
   const songs = [
     {
       id: 1,
       title: "Electric Pulse",
       artist: "Bass Drop",
       genre: "EDM",
+      album: "Electric Dreams",
       duration: "3:43",
       image: "/images/cover1.jpg",
       audio: "/audio/song1.mp3",
@@ -59,6 +59,7 @@ export const MusicProvider = ({ children }) => {
       title: "Sunset Vibes",
       artist: "Luna Beats",
       genre: "Chill",
+      album: "Evening Glow",
       duration: "4:02",
       image: "/images/cover2.jpg",
       audio: "/audio/song2.mp3",
@@ -69,8 +70,9 @@ export const MusicProvider = ({ children }) => {
       title: "Night Drive",
       artist: "DJ Nova",
       genre: "Pop",
+      album: "City Lights",
       duration: "3:20",
-      image: "/images/cover3.jpg",
+      image: "/audio/song3.mp3",
       audio: "/audio/song3.mp3",
       isNew: true,
     },
@@ -79,6 +81,7 @@ export const MusicProvider = ({ children }) => {
       title: "Deep Flow",
       artist: "Beat Collective",
       genre: "Lo-Fi",
+      album: "Chill Sessions",
       duration: "2:58",
       image: "/images/cover4.jpg",
       audio: "/audio/song4.mp3",
@@ -89,6 +92,7 @@ export const MusicProvider = ({ children }) => {
       title: "Thunder Road",
       artist: "Rock Legends",
       genre: "Rock",
+      album: "Road Trip",
       duration: "4:14",
       image: "/images/cover5.jpg",
       audio: "/audio/song5.mp3",
@@ -99,6 +103,7 @@ export const MusicProvider = ({ children }) => {
       title: "Sky High",
       artist: "Ava Beats",
       genre: "EDM",
+      album: "Skyline",
       duration: "3:50",
       image: "/images/cover6.jpg",
       audio: "/audio/song6.mp3",
@@ -109,6 +114,7 @@ export const MusicProvider = ({ children }) => {
       title: "Midnight Chill",
       artist: "Lofi Crew",
       genre: "Chill",
+      album: "Midnight Vibes",
       duration: "3:33",
       image: "/images/cover7.jpg",
       audio: "/audio/song7.mp3",
@@ -116,7 +122,35 @@ export const MusicProvider = ({ children }) => {
     },
   ];
 
-  // ✅ PLAY SONG
+  // 🔎 GLOBAL FILTER FUNCTION
+  const filterSongs = (list) => {
+    return list.filter((song) =>
+      song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      song.artist.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      song.album.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      song.genre.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
+  // 🧠 MEMOIZED FILTERED DATA
+  const filteredSongs = useMemo(
+    () => filterSongs(songs),
+    [searchQuery]
+  );
+
+  const filteredFavorites = useMemo(
+    () => filterSongs(favorites),
+    [searchQuery, favorites]
+  );
+
+  const newReleaseSongs = songs.filter((song) => song.isNew);
+
+  const filteredNewReleases = useMemo(
+    () => filterSongs(newReleaseSongs),
+    [searchQuery]
+  );
+
+  // ▶ PLAY SONG
   const playSong = (song, queue = songs) => {
     if (!song?.audio) return;
 
@@ -148,11 +182,8 @@ export const MusicProvider = ({ children }) => {
   const togglePlay = () => {
     if (!currentSong) return;
 
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
+    if (isPlaying) audioRef.current.pause();
+    else audioRef.current.play();
 
     setIsPlaying(!isPlaying);
   };
@@ -172,9 +203,8 @@ export const MusicProvider = ({ children }) => {
       nextIndex = currentIndex + 1;
 
       if (nextIndex >= activeQueue.length) {
-        if (repeatMode === "all") {
-          nextIndex = 0;
-        } else {
+        if (repeatMode === "all") nextIndex = 0;
+        else {
           setIsPlaying(false);
           return;
         }
@@ -193,9 +223,7 @@ export const MusicProvider = ({ children }) => {
 
     let prevIndex = currentIndex - 1;
 
-    if (prevIndex < 0) {
-      prevIndex = activeQueue.length - 1;
-    }
+    if (prevIndex < 0) prevIndex = activeQueue.length - 1;
 
     playSong(activeQueue[prevIndex], activeQueue);
   };
@@ -205,11 +233,8 @@ export const MusicProvider = ({ children }) => {
 
     let updated;
 
-    if (exists) {
-      updated = favorites.filter((item) => item.id !== song.id);
-    } else {
-      updated = [...favorites, song];
-    }
+    if (exists) updated = favorites.filter((item) => item.id !== song.id);
+    else updated = [...favorites, song];
 
     setFavorites(updated);
     localStorage.setItem("favorites", JSON.stringify(updated));
@@ -236,8 +261,6 @@ export const MusicProvider = ({ children }) => {
     localStorage.removeItem("playlist");
   };
 
-  const newReleaseSongs = songs.filter((song) => song.isNew);
-
   return (
     <MusicContext.Provider
       value={{
@@ -245,7 +268,12 @@ export const MusicProvider = ({ children }) => {
         login,
         logout,
         songs,
+        filteredSongs,
         newReleaseSongs,
+        filteredNewReleases,
+        favorites,
+        filteredFavorites,
+        playlist,
         currentSong,
         isPlaying,
         playSong,
@@ -256,15 +284,11 @@ export const MusicProvider = ({ children }) => {
         setIsShuffle,
         repeatMode,
         setRepeatMode,
-        favorites,
         addToFavorites,
-        playlist,
         addToPlaylist,
         audioRef,
         theme,
         setTheme,
-
-        // 🔎 EXPORT SEARCH
         searchQuery,
         setSearchQuery,
       }}
