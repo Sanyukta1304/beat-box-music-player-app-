@@ -22,7 +22,7 @@ export const MusicProvider = ({ children }) => {
   // 🔎 SEARCH
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 🎨 THEME (FIXED PROPERLY)
+  // 🎨 THEME
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") || "dark"
   );
@@ -44,8 +44,10 @@ export const MusicProvider = ({ children }) => {
   };
 
   // 💾 LOCAL STORAGE
-  const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-  const storedPlaylist = JSON.parse(localStorage.getItem("playlist")) || [];
+  const storedFavorites =
+    JSON.parse(localStorage.getItem("favorites")) || [];
+  const storedPlaylist =
+    JSON.parse(localStorage.getItem("playlist")) || [];
 
   const [favorites, setFavorites] = useState(storedFavorites);
   const [playlist, setPlaylist] = useState(storedPlaylist);
@@ -131,7 +133,7 @@ export const MusicProvider = ({ children }) => {
     },
   ];
 
-  // 🔎 GLOBAL FILTER FUNCTION
+  // 🔎 GLOBAL FILTER
   const filterSongs = (list) => {
     return list.filter((song) =>
       song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -235,7 +237,7 @@ export const MusicProvider = ({ children }) => {
     playSong(activeQueue[prevIndex], activeQueue);
   };
 
-  // ❤️ FAVORITES WITH TOAST
+  // ❤️ FAVORITES
   const addToFavorites = (song) => {
     const exists = favorites.find((item) => item.id === song.id);
 
@@ -253,7 +255,7 @@ export const MusicProvider = ({ children }) => {
     localStorage.setItem("favorites", JSON.stringify(updated));
   };
 
-  // ➕ PLAYLIST WITH DUPLICATE CHECK + TOAST
+  // ➕ ADD TO PLAYLIST
   const addToPlaylist = (song) => {
     const exists = playlist.find((item) => item.id === song.id);
 
@@ -266,6 +268,14 @@ export const MusicProvider = ({ children }) => {
     setPlaylist(updated);
     localStorage.setItem("playlist", JSON.stringify(updated));
     showToast("Added to Playlist 🎵");
+  };
+
+  // ❌ REMOVE FROM PLAYLIST
+  const removeFromPlaylist = (id) => {
+    const updated = playlist.filter((item) => item.id !== id);
+    setPlaylist(updated);
+    localStorage.setItem("playlist", JSON.stringify(updated));
+    showToast("Removed from Playlist 🗑");
   };
 
   const login = (email) => {
@@ -308,6 +318,7 @@ export const MusicProvider = ({ children }) => {
         setRepeatMode,
         addToFavorites,
         addToPlaylist,
+        removeFromPlaylist,
         audioRef,
         theme,
         setTheme,

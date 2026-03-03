@@ -1,6 +1,12 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { MusicProvider } from "./context/MusicContext";
-import { useState, useEffect } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+import { MusicProvider, MusicContext } from "./context/MusicContext";
+import { useState, useEffect, useContext } from "react";
 
 import Navbar from "./components/Navbar";
 import Player from "./components/Player";
@@ -20,8 +26,8 @@ import "./App.css";
 
 function LayoutWrapper({ children, darkMode, setDarkMode }) {
   const location = useLocation();
+  const { toast } = useContext(MusicContext); // ✅ GET TOAST
 
-  // Hide Navbar & Player on auth pages
   const hideLayout =
     location.pathname === "/login" || location.pathname === "/register";
 
@@ -34,6 +40,9 @@ function LayoutWrapper({ children, darkMode, setDarkMode }) {
       <main className="main-content">{children}</main>
 
       {!hideLayout && <Player />}
+
+      {/* ✅ GLOBAL TOAST */}
+      {toast && <div className="global-toast">{toast}</div>}
     </div>
   );
 }
@@ -43,7 +52,6 @@ function LayoutWrapper({ children, darkMode, setDarkMode }) {
 function App() {
   const [darkMode, setDarkMode] = useState(true);
 
-  // 🔥 THIS CONNECTS REACT TO CSS
   useEffect(() => {
     document.body.className = darkMode ? "dark" : "light";
   }, [darkMode]);

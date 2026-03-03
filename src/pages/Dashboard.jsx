@@ -8,11 +8,12 @@ function Dashboard() {
     playlist,
     favorites,
     songs,
-    filterSongs,   // ✅ get filter function
-    searchQuery,   // ✅ optional (if needed later)
+    filterSongs,
+    searchQuery,
+    removeFromPlaylist,
+    playSong,
   } = useContext(MusicContext);
 
-  // ✅ Filter playlist based on search
   const filteredPlaylist = filterSongs
     ? filterSongs(playlist)
     : playlist;
@@ -22,6 +23,7 @@ function Dashboard() {
 
   return (
     <div className="dashboard-container">
+
       {/* ================= HEADER ================= */}
       <div className="dashboard-header">
         <div className="dashboard-avatar">
@@ -82,19 +84,36 @@ function Dashboard() {
           <div className="playlist-list">
             {filteredPlaylist.map((song) => (
               <div key={song.id} className="playlist-item">
-                <img
-                  src={song.image}
-                  alt={song.title}
-                />
-                <div>
-                  <h4>{song.title}</h4>
-                  <p>{song.artist}</p>
+
+                {/* LEFT SIDE */}
+                <div className="playlist-left">
+                  <img
+                    src={song.image}
+                    alt={song.title}
+                    onClick={() => playSong(song, playlist)}
+                  />
+
+                  <div className="playlist-info">
+                    <h4>{song.title}</h4>
+                    <p>{song.artist}</p>
+                  </div>
                 </div>
+
+                {/* RIGHT SIDE */}
+                <button
+                className="remove-btn"
+                onClick={() => removeFromPlaylist(song.id)}
+                title="Remove from Playlist"
+                >
+                  −
+                </button>
+
               </div>
             ))}
           </div>
         )}
       </div>
+
     </div>
   );
 }
