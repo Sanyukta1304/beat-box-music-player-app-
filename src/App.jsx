@@ -26,7 +26,7 @@ import "./App.css";
 
 function LayoutWrapper({ children, darkMode, setDarkMode }) {
   const location = useLocation();
-  const { toast } = useContext(MusicContext); // ✅ GET TOAST
+  const { toast } = useContext(MusicContext);
 
   const hideLayout =
     location.pathname === "/login" || location.pathname === "/register";
@@ -41,7 +41,6 @@ function LayoutWrapper({ children, darkMode, setDarkMode }) {
 
       {!hideLayout && <Player />}
 
-      {/* ✅ GLOBAL TOAST */}
       {toast && <div className="global-toast">{toast}</div>}
     </div>
   );
@@ -61,9 +60,23 @@ function App() {
       <BrowserRouter>
         <LayoutWrapper darkMode={darkMode} setDarkMode={setDarkMode}>
           <Routes>
-            <Route path="/" element={<Home />} />
+
+            {/* Default Route → ALWAYS go to login first */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
+
+            {/* Public Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+
+            {/* Protected Routes */}
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
 
             <Route
               path="/dashboard"
@@ -101,7 +114,9 @@ function App() {
               }
             />
 
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Catch All */}
+            <Route path="*" element={<Navigate to="/login" replace />} />
+
           </Routes>
         </LayoutWrapper>
       </BrowserRouter>
